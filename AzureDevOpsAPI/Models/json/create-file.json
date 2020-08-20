@@ -1,0 +1,25 @@
+﻿{
+  "commits": [
+    {
+      "changes": [
+        {
+          "changeType": 1,
+          "item": {
+            "path": "{{gitFilePath}}"
+          },
+          "newContent": {
+            "content": "{{base64EncodedFileContent}}",
+            "contentType": 1
+          }
+        }
+      ],
+      "comment": "{{gitCommitMessage}}"
+    }
+  ],
+  "refUpdates": [
+    {
+      "name": "{{gitRefName}}",
+      "oldObjectId": "{{gitReferenceOldObjectId}}"
+    }
+  ]
+}
