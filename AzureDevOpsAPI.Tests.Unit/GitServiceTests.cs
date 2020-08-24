@@ -7,9 +7,9 @@ using Newtonsoft.Json;
 
 namespace AzureDevOpsAPI.Tests.Unit
 {
-    [TestClass]
     public class GitServiceTests
     {
+        [TestClass]
         public class Constructor : GitServiceMock
         {
             [TestMethod]
