@@ -19,7 +19,7 @@ namespace AzureDevOpsAPI
         public string Organization { get; set; }
         public string Project { get; set; }
 
-        public void SetDefaultHeaders(string personalAccessToken)
+        public GitService(string personalAccessToken)
         {
             Client = new HttpClient
             {
@@ -27,9 +27,8 @@ namespace AzureDevOpsAPI
                 {
                     Authorization = new AuthenticationHeaderValue("Basic",
                         Convert.ToBase64String(
-                            ASCIIEncoding.ASCII.GetBytes(
-                                string.Format("{0}:{1}", "", personalAccessToken)))),
-                    Accept = {new MediaTypeWithQualityHeaderValue("application/json")}
+                            Encoding.ASCII.GetBytes($"\"\":{personalAccessToken}"))),
+                    Accept = { new MediaTypeWithQualityHeaderValue("application/json") }
                 }
             };
         }

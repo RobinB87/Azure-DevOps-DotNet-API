@@ -12,7 +12,6 @@ namespace AzureDevOpsAPI
         string Organization { get; set; }
         string Project { get; set; }
 
-        void SetDefaultHeaders(string personalAccessToken);
         Task<GitRepository[]> GetRepositoriesAsync();
         Task<GitRepository> GetRepositoryAsync(string repositoryIdOrName);
         Task<HttpResponseMessage> CreateFileAsync(string jsonBodyFilePath, string gitRefName, string gitReferenceOldObjectId,
