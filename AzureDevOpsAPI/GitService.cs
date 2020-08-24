@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace AzureDevOpsAPI
 {
-    public class GitService
+    public class GitService : IGitService
     {
         public HttpClient Client { get; set; }
         public string ApiVersion { get; set; }
@@ -43,7 +43,7 @@ namespace AzureDevOpsAPI
             }
             catch (Exception ex)
             {
-                throw new Exception($"Repositories could not be found for {Organization}");
+                throw new Exception($"Repositories could not be found for {Organization}" + ex);
             }
         }
 
@@ -60,7 +60,7 @@ namespace AzureDevOpsAPI
             catch (Exception ex)
             {
                 throw new Exception(
-                    $"Something went wrong while getting repository with name or id: '{repositoryIdOrName}'");
+                    $"Something went wrong while getting repository with name or id: '{repositoryIdOrName}'" + ex);
             }
         }
 
@@ -93,7 +93,7 @@ namespace AzureDevOpsAPI
             catch (Exception ex)
             {
                 throw new Exception(
-                    $"Something went wrong while creation the file '{fileName}'.");
+                    $"Something went wrong while creation the file '{fileName}'." + ex);
             }
         }
 
@@ -111,7 +111,7 @@ namespace AzureDevOpsAPI
             catch (Exception ex)
             {
                 throw new Exception(
-                    $"Something went wrong while getting old object id for repository with id: '{repositoryId}'");
+                    $"Something went wrong while getting old object id for repository with id: '{repositoryId}'" + ex);
             }
         }
     }
