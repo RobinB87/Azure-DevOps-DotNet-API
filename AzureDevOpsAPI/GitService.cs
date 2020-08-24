@@ -21,6 +21,11 @@ namespace AzureDevOpsAPI
 
         public GitService(string personalAccessToken)
         {
+            if (string.IsNullOrWhiteSpace(personalAccessToken))
+            {
+                throw new ArgumentNullException(nameof(personalAccessToken));
+            }
+
             Client = new HttpClient
             {
                 DefaultRequestHeaders =
