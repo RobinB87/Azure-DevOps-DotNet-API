@@ -18,18 +18,23 @@ namespace AzureDevOpsAPI
         public string BaseUrl { get; set; }
         public string Organization { get; set; }
         public string Project { get; set; }
+        public string JsonFolder { get; set; }
 
-        public void SetDefaultHeaders(string personalAccessToken)
+        public GitService(string personalAccessToken)
         {
+            if (string.IsNullOrWhiteSpace(personalAccessToken))
+            {
+                throw new ArgumentNullException(nameof(personalAccessToken));
+            }
+
             Client = new HttpClient
             {
                 DefaultRequestHeaders =
                 {
                     Authorization = new AuthenticationHeaderValue("Basic",
                         Convert.ToBase64String(
-                            ASCIIEncoding.ASCII.GetBytes(
-                                string.Format("{0}:{1}", "", personalAccessToken)))),
-                    Accept = {new MediaTypeWithQualityHeaderValue("application/json")}
+                            Encoding.ASCII.GetBytes($"\"\":{personalAccessToken}"))),
+                    Accept = { new MediaTypeWithQualityHeaderValue("application/json") }
                 }
             };
         }
@@ -64,12 +69,12 @@ namespace AzureDevOpsAPI
             }
         }
 
-        public async Task<HttpResponseMessage> CreateFileAsync(string jsonBodyFilePath, string gitRefName, string gitReferenceOldObjectId,
+        public async Task<HttpResponseMessage> CreateFileAsync(string gitRefName, string gitReferenceOldObjectId,
             string fileName, string repository, string base64EncodedFileContent, string repositoryId)
         {
             try
             {
-                var body = Utils.CreateMessageBody(jsonBodyFilePath, "application/json",
+                var body = Utils.CreateMessageBody($"{JsonFolder}/create-file.json", "application/json",
                     new Dictionary<string, object>
                     {
                         {"gitRefName", gitRefName},
@@ -112,6 +117,28 @@ namespace AzureDevOpsAPI
             {
                 throw new Exception(
                     $"Something went wrong while getting old object id for repository with id: '{repositoryId}'" + ex);
+            }
+        }
+
+        public async Task<HttpResponseMessage> ApproveRelease(int approvalId)
+        {
+            try
+            {
+                var body = Utils.CreateMessageBody($"{JsonFolder}/create-approval.json", "application/json");
+                var uri = $"{BaseUrl}/{Organization}/{Project}/_apis/release/approvals/{approvalId}?api-version={ApiVersion}";
+
+                // Content type header
+                var request = new HttpRequestMessage(HttpMethod.Post, uri)
+                {
+                    Content = body
+                };
+
+                return await Client.SendAsync(request);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(
+                    $"Something went wrong while approving the release with with approval id: '{approvalId}'" + ex);
             }
         }
     }

@@ -11,12 +11,13 @@ namespace AzureDevOpsAPI
         string BaseUrl { get; set; }
         string Organization { get; set; }
         string Project { get; set; }
+        string JsonFolder { get; set; }
 
-        void SetDefaultHeaders(string personalAccessToken);
         Task<GitRepository[]> GetRepositoriesAsync();
         Task<GitRepository> GetRepositoryAsync(string repositoryIdOrName);
-        Task<HttpResponseMessage> CreateFileAsync(string jsonBodyFilePath, string gitRefName, string gitReferenceOldObjectId,
+        Task<HttpResponseMessage> CreateFileAsync(string gitRefName, string gitReferenceOldObjectId,
             string fileName, string repository, string base64EncodedFileContent, string repositoryId);
         Task<string> GetOldObjectIdAsync(string repositoryId);
+        Task<HttpResponseMessage> ApproveRelease(int approvalId);
     }
 }
